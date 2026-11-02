@@ -44,7 +44,12 @@ sorta() {
 			sort -k1,1 "$file" -o "$to"
 			;;
 		--time)
-			sort -k2,2 "$file" -o "$to"
+			tmp="$(mktemp)"
+			awk '{
+				split($2, d, ":")
+				print d[3], d[2], d[1], $0
+			}' "$file" | sort -k1,1n -k2,2n -k3,3n | cut -d' ' -f4- > "$tmp"
+			mv "$tmp" "$to"
 			;;
 	esac
 }
@@ -67,6 +72,8 @@ case "$1" in
 		sorta "$2" "$3"
 		;;
 esac
+
+
 
 
 
