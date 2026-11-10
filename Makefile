@@ -11,6 +11,12 @@ OBJ_DIRS := $(sort $(dir $(OBJ)))
 
 .PHONY: all clean test
 
+ifneq ($(filter clean,$(MAKECMDGOALS)),)
+ifneq ($(filter-out clean,$(MAKECMDGOALS)),)
+.NOTPARALLEL:
+endif
+endif
+
 all: $(BIN)
 
 build/genmul: tools/genmul.c | build
